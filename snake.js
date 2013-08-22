@@ -5,7 +5,9 @@ snake.load = function () {
 	this.len = 2; // Size of our snake at beginning - TODO
 	this.gameOver = false;
 
-	// # - wall, X - invisible wall, ' ' - empty space
+	// Add custom maps
+
+	// # - maps, X - invisible wall, ' ' - empty space
 	this.mapSize = [15, 10];
 	this.map = {};
 	for (i = 0; i < this.mapSize[0]; i++) {
@@ -23,7 +25,8 @@ snake.load = function () {
 	this.food = this.generateFood();
 	this.score = 0;
 
-	this.directionHistory = ['r'];
+	this.lastDirection = 'r';
+	this.directionHistory = [this.lastDirection];
 };
 
 snake.newPos = function (direction) {
@@ -39,13 +42,23 @@ snake.newPos = function (direction) {
 };
 
 snake.move = function (direction) {
+	// Update directionHistory
+	// Delete some of directionHistory
+
+	if ((direction === 'l' && this.lastDirection === 'r') || (direction === 'r' && this.lastDirection === 'l') || (direction === 'd' && this.lastDirection === 'u') || (direction === 'u' && this.lastDirection === 'd')) {
+		direction = this.lastDirection;
+	}
+
 	var n = this.newPos(direction);
+
 	if (0 >= n[0] < this.mapSize[0] && 0 >= n[1] < this.mapSize[1] && this.map[n[0]][n[1]] !== '#' && !this.posMatches(n)) {
 		var tail = this.pos[this.pos.length - 1] // Just in case our snake gets hungry
 		this.pos.reverse();
 		this.pos.shift();
 		this.pos.push(n);
 		this.pos.reverse();
+
+		this.lastDirection = direction;
 	
 		if (this.pos[0][0] === this.food[0] && this.pos[0][1] === this.food[1]) { // OM NOM NOM NOM!
 			this.score++;
@@ -120,5 +133,3 @@ var loop = function () {
 
 snake.update();
 loop();
-
-//document.write('<pre>' + snake.display() + '</pre>');
