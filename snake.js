@@ -118,7 +118,7 @@ snake.displayInitial = function () {
 	var c = document.getElementById("snakeCanvas");
 	this.ctx = c.getContext("2d");
 
-	this.ctx.fillStyle="#bbbbbb";
+	this.ctx.fillStyle="#999";
 
 	//this.ctx.fillRect(0, 0, this.mapSize[0]*blockSize, blockSize); // Up
 	//this.ctx.fillRect(0, (this.mapSize[1] - 1)*blockSize, this.mapSize[0]*blockSize, blockSize); // Down
@@ -155,7 +155,7 @@ snake.display = function () {
 }
 
 snake.update = function () {
-	document.getElementById("snake").innerHTML=this.displayTxt();
+	/*document.getElementById("snake").innerHTML=this.displayTxt(); */
 	this.display();
 };
 
@@ -185,7 +185,17 @@ var loop = function () {
 		snake.update();
 		window.setTimeout(loop, 600  - Math.min(snake.score*75, 475));
 	} else {
-		document.write('Game over! Score: ' + snake.score);
+		/*document.write('Game over! Score: ' + snake.score);*/
+
+		snake.ctx.globalAlpha = 0.20;
+		snake.ctx.fillStyle = "#eee";
+		snake.ctx.fillRect(0, 0, snake.mapSize[0]*blockSize, snake.mapSize[1]*blockSize);
+
+		snake.ctx.globalAlpha = 0.75;
+		snake.ctx.font = "bold 25px Arial";
+		snake.ctx.textAlign = "center";
+		snake.ctx.fillStyle = "#000";
+		snake.ctx.fillText("Game over! Score: " + snake.score, Math.floor(450/2-25/2), 300/2);
 	}
 }
 
@@ -193,6 +203,5 @@ snake.load();
 snake.displayInitial(); // GUI
 snake.update();
 loop();
-
 
 //snake.display();

@@ -3,9 +3,19 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Snake</title>
+		<style>
+			.centered {
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				margin-top: -150px;
+				margin-left: -225px;
+			}
+		</style>
+	</head>
 	</head>
 	<body onkeydown="snake.keyPressed(event)">
-		<script type='text/javascript'></script>
+		<!--- Old UI
 		<table>
 			<tr align='center'>
 				<td></td><td><a onclick="direction='u'">UP</a></td><td></td>
@@ -17,9 +27,8 @@
 				<td></td><td><a onclick="direction='d'">DOWN</a></td><td></td>
 			</tr>
 		</table>
-		<pre id="snake"></pre>
-		<br>
-		<canvas id="snakeCanvas" width="450" height="300" style="border:1px solid #cccccc;"></canvas>
+		<pre id="snake"></pre><br>-->
+		<div class="centered"><canvas id="snakeCanvas" width="450" height="300" style="border:1px solid #cccccc;"></canvas></div>
 
 		<script type='text/javascript' src='snake.js'></script>
 	</body>
