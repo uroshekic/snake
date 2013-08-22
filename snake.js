@@ -120,12 +120,28 @@ snake.update = function () {
 snake.load();
 
 var direction = 'r';
+snake.keyPressed = function (e) {
+	switch (e.keyCode) {
+		case 37:
+			direction = 'l';
+			break;
+		case 38:
+			direction = 'u';
+			break;
+		case 39:
+			direction = 'r';
+			break;
+		case 40:
+			direction = 'd';
+			break;
+	}
+};
 var timeout;
 
 var loop = function () { 
 	if (snake.move(direction)) {
 		snake.update();
-		window.setTimeout(loop, 750  - Math.min(snake.score*10, 500));
+		window.setTimeout(loop, 600  - Math.min(snake.score*75, 475));
 	} else {
 		document.write('Game over! Score: ' + snake.score);
 	}
