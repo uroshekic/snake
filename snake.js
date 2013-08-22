@@ -7,7 +7,7 @@ snake.load = function () {
 
 	// Add custom maps
 
-	// # - maps, X - invisible wall, ' ' - empty space
+	// # - wall, ' ' - empty space
 	this.mapSize = [15, 10];
 	this.map = {};
 	for (i = 0; i < this.mapSize[0]; i++) {
@@ -21,7 +21,6 @@ snake.load = function () {
 		}
 	}
 
-	// Generate food (randomly)
 	this.food = this.generateFood();
 	this.score = 0;
 
@@ -91,8 +90,8 @@ snake.generateFood = function () {
 	return [x, y];
 };
 
-// GUI
-snake.display = function () {
+// UI
+snake.displayTxt = function () {
 	s = '';
 	for (j = 0; j < this.mapSize[1]; j++) {
 		for (i = 0; i < this.mapSize[0]; i++) {
@@ -113,11 +112,54 @@ snake.display = function () {
 	return s;
 };
 
-snake.update = function () {
-	document.getElementById("snake").innerHTML=this.display();
+// GUI
+var blockSize = 30;
+snake.displayInitial = function () {
+	var c = document.getElementById("snakeCanvas");
+	this.ctx = c.getContext("2d");
+
+	this.ctx.fillStyle="#bbbbbb";
+
+	//this.ctx.fillRect(0, 0, this.mapSize[0]*blockSize, blockSize); // Up
+	//this.ctx.fillRect(0, (this.mapSize[1] - 1)*blockSize, this.mapSize[0]*blockSize, blockSize); // Down
+	//this.ctx.fillRect(0, blockSize, blockSize, (this.mapSize[1] - 2)*blockSize); // Left
+	//this.ctx.fillRect((this.mapSize[0] - 1)*blockSize, blockSize, blockSize, (this.mapSize[1] - 2)*blockSize); // Left
+	// Dinamično generiraj. Nariši block tam, kjer je na mapi '#'.
+	for (j = 0; j < this.mapSize[1]; j++) {
+		for (i = 0; i < this.mapSize[0]; i++) {
+			if (this.map[i][j] === '#') {
+				this.ctx.fillRect(i*blockSize, j*blockSize, blockSize, blockSize);
+			}			
+		}
+	}
 };
 
-snake.load();
+snake.display = function () {
+	var s = '';
+	for (j = 0; j < this.mapSize[1]; j++) {
+		for (i = 0; i < this.mapSize[0]; i++) {
+			if (this.map[i][j] === '#') {
+				continue;
+			} else if (this.pos[0][0] === i && this.pos[0][1] === j) {
+				this.ctx.fillStyle = "#ccc";
+			} else if (this.posMatches([i, j])) {
+				this.ctx.fillStyle = "#eee";
+			} else if (i === this.food[0] && j === this.food[1]) {
+				this.ctx.fillStyle = "#f00";
+			} else {
+				this.ctx.fillStyle = "#fff";
+			}
+			this.ctx.fillRect(i*blockSize, j*blockSize, blockSize, blockSize);
+		}
+	}
+}
+
+snake.update = function () {
+	document.getElementById("snake").innerHTML=this.displayTxt();
+	this.display();
+};
+
+
 
 var direction = 'r';
 snake.keyPressed = function (e) {
@@ -147,5 +189,10 @@ var loop = function () {
 	}
 }
 
+snake.load();
+snake.displayInitial(); // GUI
 snake.update();
 loop();
+
+
+//snake.display();
