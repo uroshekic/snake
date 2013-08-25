@@ -8,7 +8,7 @@ snake.load = function () {
 	// Add custom maps
 
 	// # - wall, ' ' - empty space
-	this.mapSize = [15, 10];
+	this.mapSize = [20, 15];
 	this.map = {};
 	for (i = 0; i < this.mapSize[0]; i++) {
 		this.map[i] = {};
@@ -113,18 +113,10 @@ snake.displayTxt = function () {
 };
 
 // GUI
-var blockSize = 30;
 snake.displayInitial = function () {
 	var c = document.getElementById("snakeCanvas");
 	this.ctx = c.getContext("2d");
-
 	this.ctx.fillStyle="#999";
-
-	//this.ctx.fillRect(0, 0, this.mapSize[0]*blockSize, blockSize); // Up
-	//this.ctx.fillRect(0, (this.mapSize[1] - 1)*blockSize, this.mapSize[0]*blockSize, blockSize); // Down
-	//this.ctx.fillRect(0, blockSize, blockSize, (this.mapSize[1] - 2)*blockSize); // Left
-	//this.ctx.fillRect((this.mapSize[0] - 1)*blockSize, blockSize, blockSize, (this.mapSize[1] - 2)*blockSize); // Left
-	// Dinamično generiraj. Nariši block tam, kjer je na mapi '#'.
 	for (j = 0; j < this.mapSize[1]; j++) {
 		for (i = 0; i < this.mapSize[0]; i++) {
 			if (this.map[i][j] === '#') {
@@ -152,18 +144,15 @@ snake.display = function () {
 			this.ctx.fillRect(i*blockSize, j*blockSize, blockSize, blockSize);
 		}
 	}
-}
+};
 
 snake.update = function () {
-	/*document.getElementById("snake").innerHTML=this.displayTxt(); */
 	this.display();
 };
 
-
-
-var direction = 'r';
 snake.keyPressed = function (e) {
 	switch (e.keyCode) {
+		// Arrow keys
 		case 37:
 			direction = 'l';
 			break;
@@ -176,17 +165,28 @@ snake.keyPressed = function (e) {
 		case 40:
 			direction = 'd';
 			break;
+
+		// WASD
+		case 65:
+			direction = 'l';
+			break;
+		case 87:
+			direction = 'u';
+			break;
+		case 68:
+			direction = 'r';
+			break;
+		case 83:
+			direction = 'd';
+			break;
 	}
 };
-var timeout;
 
 var loop = function () { 
 	if (snake.move(direction)) {
 		snake.update();
-		window.setTimeout(loop, 600  - Math.min(snake.score*75, 475));
+		window.setTimeout(loop, 600  - Math.min(snake.score*75, 500));
 	} else {
-		/*document.write('Game over! Score: ' + snake.score);*/
-
 		snake.ctx.globalAlpha = 0.20;
 		snake.ctx.fillStyle = "#eee";
 		snake.ctx.fillRect(0, 0, snake.mapSize[0]*blockSize, snake.mapSize[1]*blockSize);
@@ -195,13 +195,31 @@ var loop = function () {
 		snake.ctx.font = "bold 25px Arial";
 		snake.ctx.textAlign = "center";
 		snake.ctx.fillStyle = "#000";
-		snake.ctx.fillText("Game over! Score: " + snake.score, Math.floor(450/2-25/2), 300/2);
+		snake.ctx.fillText("Game over! Score: " + snake.score, Math.floor(600/2-25/2), 300/2);
 	}
 }
 
+var direction = 'r';
+
+var blockSize = 30;
 snake.load();
-snake.displayInitial(); // GUI
+snake.displayInitial();
 snake.update();
 loop();
 
-//snake.display();
+/* Old Text UI
+var display = function () {
+	document.getElementById("snake").innerHTML=snake.displayTxt();
+};
+var loop = function () {
+	if (snake.move(direction)) {
+		document.getElementById("snake").innerHTML=snake.displayTxt();
+		window.setTimeout(loop, 600  - Math.min(snake.score*75, 475));
+	} else {
+		document.write('Game over! Score: ' + snake.score);
+	}
+};
+snake.load();
+document.getElementById("snake").innerHTML=snake.displayTxt();
+loop();
+*/

@@ -1,6 +1,6 @@
 Snake
 =====
 
-Snake clone written in JavaScript, still needs a bit of work though. 
+Snake clone written in JavaScript. 
 
-Open index.html and play! You can also play it <a href='http://urosh.net/snake/'>here</a>.
+Open index.html and play! You can also play <a href='http://urosh.net/snake/'>here</a>.

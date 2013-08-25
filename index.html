@@ -8,28 +8,16 @@
 				position: fixed;
 				top: 50%;
 				left: 50%;
-				margin-top: -150px;
-				margin-left: -225px;
+				margin-top: -225px;
+				margin-left: -300px;
 			}
 		</style>
 	</head>
-	</head>
 	<body onkeydown="snake.keyPressed(event)">
-		<!--- Old UI
-		<table>
-			<tr align='center'>
-				<td></td><td><a onclick="direction='u'">UP</a></td><td></td>
-			</tr>
-			<tr>
-				<td><a onclick="direction='l'">LEFT</a></td><td></td><td><a onclick="direction='r'">RIGHT</a></td>
-			</tr>
-			<tr>
-				<td></td><td><a onclick="direction='d'">DOWN</a></td><td></td>
-			</tr>
-		</table>
-		<pre id="snake"></pre><br>-->
-		<div class="centered"><canvas id="snakeCanvas" width="450" height="300" style="border:1px solid #cccccc;"></canvas></div>
-
+		<div class="centered">
+			<canvas id="snakeCanvas" width="600" height="450"></canvas>
+		</div>
+		<!--<pre id="snake"></pre>-->
 		<script type='text/javascript' src='snake.js'></script>
 	</body>
 </html>
