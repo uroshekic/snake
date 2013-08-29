@@ -2,7 +2,8 @@ var snake = new Object();
 
 snake.load = function () {
 	this.pos = [[2, 1], [1, 1]]; // this.pos[0] is the position of snake's head
-	this.len = 2; // Size of our snake at beginning - TODO
+	snake.tail = [1, 1];
+	this.len = this.pos.length; // Size of our snake at beginning
 	this.gameOver = false;
 
 	// Add custom maps
@@ -10,9 +11,9 @@ snake.load = function () {
 	// # - wall, ' ' - empty space
 	this.mapSize = [20, 15];
 	this.map = {};
-	for (i = 0; i < this.mapSize[0]; i++) {
+	for (var i = 0; i < this.mapSize[0]; i++) {
 		this.map[i] = {};
-		for (j = 0; j < this.mapSize[1]; j++) {
+		for (var j = 0; j < this.mapSize[1]; j++) {
 			if (i === 0 || j === 0 || i === (this.mapSize[0] - 1) || j === (this.mapSize[1] - 1)) {
 				this.map[i][j] = '#';
 			} else {
@@ -51,7 +52,7 @@ snake.move = function (direction) {
 	var n = this.newPos(direction);
 
 	if (0 >= n[0] < this.mapSize[0] && 0 >= n[1] < this.mapSize[1] && this.map[n[0]][n[1]] !== '#' && !this.posMatches(n)) {
-		var tail = this.pos[this.pos.length - 1] // Just in case our snake gets hungry
+		this.tail = this.pos[this.pos.length - 1] // Just in case our snake gets hungry
 		this.pos.reverse();
 		this.pos.shift();
 		this.pos.push(n);
@@ -61,7 +62,7 @@ snake.move = function (direction) {
 	
 		if (this.pos[0][0] === this.food[0] && this.pos[0][1] === this.food[1]) { // OM NOM NOM NOM!
 			this.score++;
-			this.pos.push(tail);
+			this.pos.push(this.tail);
 			this.food = this.generateFood();
 		}
 
@@ -74,7 +75,7 @@ snake.move = function (direction) {
 };
 
 snake.posMatches = function (n) {
-	for (z = 0; z < this.pos.length; z++) {
+	for (var z = 0; z < this.pos.length; z++) {
 		if (this.pos[z][0] === n[0] && this.pos[z][1] === n[1]) {
 			return true;
 		}
@@ -86,15 +87,15 @@ snake.generateFood = function () {
 	do {
 		var x = Math.floor(Math.random()*this.mapSize[0]);
 		var y = Math.floor(Math.random()*this.mapSize[1]);
-	} while (this.map[x][y] === '#' || this.map[x][y] === 'X' || this.posMatches([x, y])); // 
+	} while (this.map[x][y] === '#' || this.map[x][y] === 'X' || this.posMatches([x, y])); 
 	return [x, y];
 };
 
 // UI
 snake.displayTxt = function () {
 	s = '';
-	for (j = 0; j < this.mapSize[1]; j++) {
-		for (i = 0; i < this.mapSize[0]; i++) {
+	for (var j = 0; j < this.mapSize[1]; j++) {
+		for (var i = 0; i < this.mapSize[0]; i++) {
 			if (this.pos[0][0] === i && this.pos[0][1] === j) {
 				s += '@';
 			} else
@@ -116,30 +117,34 @@ snake.displayTxt = function () {
 snake.displayInitial = function () {
 	var c = document.getElementById("snakeCanvas");
 	this.ctx = c.getContext("2d");
-	this.ctx.fillStyle="#999";
-	for (j = 0; j < this.mapSize[1]; j++) {
-		for (i = 0; i < this.mapSize[0]; i++) {
+	for (var j = 0; j < this.mapSize[1]; j++) {
+		for (var i = 0; i < this.mapSize[0]; i++) {
 			if (this.map[i][j] === '#') {
-				this.ctx.fillRect(i*blockSize, j*blockSize, blockSize, blockSize);
-			}			
+				this.ctx.fillStyle="#999";
+			} else {
+				this.ctx.fillStyle="#fff";
+			}
+			this.ctx.fillRect(i*blockSize, j*blockSize, blockSize, blockSize);			
 		}
 	}
 };
 
 snake.display = function () {
 	var s = '';
-	for (j = 0; j < this.mapSize[1]; j++) {
-		for (i = 0; i < this.mapSize[0]; i++) {
+	for (var j = 0; j < this.mapSize[1]; j++) {
+		for (var i = 0; i < this.mapSize[0]; i++) {
 			if (this.map[i][j] === '#') {
 				continue;
-			} else if (this.pos[0][0] === i && this.pos[0][1] === j) {
+			} else if (this.pos[0][0] === i && this.pos[0][1] === j) { // Snake's head
 				this.ctx.fillStyle = "#ccc";
-			} else if (this.posMatches([i, j])) {
+			} else if (this.posMatches([i, j])) { // Snake's body
 				this.ctx.fillStyle = "#eee";
-			} else if (i === this.food[0] && j === this.food[1]) {
+			} else if (i === this.food[0] && j === this.food[1]) { // Food
 				this.ctx.fillStyle = "#f00";
-			} else {
+			} else if (i === snake.tail[0] && j === snake.tail[1]) { // Snake's tail
 				this.ctx.fillStyle = "#fff";
+			} else {
+				continue; // Leave the rest as it is
 			}
 			this.ctx.fillRect(i*blockSize, j*blockSize, blockSize, blockSize);
 		}
@@ -185,7 +190,7 @@ snake.keyPressed = function (e) {
 var loop = function () { 
 	if (snake.move(direction)) {
 		snake.update();
-		window.setTimeout(loop, 600  - Math.min(snake.score*75, 500));
+		window.setTimeout(loop, 400  - Math.min(snake.score*25, 325));
 	} else {
 		snake.ctx.globalAlpha = 0.20;
 		snake.ctx.fillStyle = "#eee";
