@@ -190,7 +190,7 @@ snake.keyPressed = function (e) {
 var loop = function () { 
 	if (snake.move(direction)) {
 		snake.update();
-		window.setTimeout(loop, 400  - Math.min(snake.score*25, 325));
+		window.setTimeout(loop, 400  - Math.min(snake.score*25, 300));
 	} else {
 		snake.ctx.globalAlpha = 0.20;
 		snake.ctx.fillStyle = "#eee";

@@ -11,11 +11,17 @@
 				margin-top: -225px;
 				margin-left: -300px;
 			}
+			.controls {
+				text-align: center;
+				font-family: 'Arial';
+				font-size: 12px;
+			}
 		</style>
 	</head>
 	<body onkeydown="snake.keyPressed(event)">
 		<div class="centered">
 			<canvas id="snakeCanvas" width="600" height="450"></canvas>
+			<p class="controls">Play with &larr; &uarr; &rarr; &darr; or WASD.</p>
 		</div>
 		<!--<pre id="snake"></pre>-->
 		<script type='text/javascript' src='snake.js'></script>
